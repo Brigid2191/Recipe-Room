@@ -27,5 +27,5 @@ jobs:
       - name: Build project
         run: npm run build
 
-      - name: Skip tests (no test script defined)
+      - name: Skip tests
         run: "echo 'Skipping tests: no test script in package.json'"
