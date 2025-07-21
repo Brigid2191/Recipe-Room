@@ -2,9 +2,11 @@ name: CI
 
 on:
   push:
-    branches: [ main ]
+    branches:
+      - main
   pull_request:
-    branches: [ main ]
+    branches:
+      - main
 
 jobs:
   build:
@@ -25,6 +27,5 @@ jobs:
       - name: Build project
         run: npm run build
 
-      # Tests are optional — skipped to avoid "missing script: test" errors
       - name: Skip tests (no test script defined)
-        run: echo "Skipping tests: no test script in package.json"
+        run: "echo 'Skipping tests: no test script in package.json'"
