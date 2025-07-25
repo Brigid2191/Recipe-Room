@@ -1,0 +1,43 @@
+.venv/
+venv/
+ENV/
+env/
+
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# VS Code settings
+.vscode/
+
+# MacOS & system files
+.DS_Store
+
+# Environment variables and secrets
+.env
+.env.*
+
+# Database files (optional)
+*.sqlite3
+*.db
+
+# Flask instance folders (optional)
+instance/
+*.log
+
+# Alembic migration logs and caches
+migrations/*.log
+migrations/versions/*.pyc
+migrations/__pycache__/
+
+.pytest_cache/
+
+htmlcov/
+coverage.xml
+*.cover
+*.py,cover
+
+.idea/
+
+*.tmp
