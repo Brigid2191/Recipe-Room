@@ -1,15 +1,18 @@
-import cloudinary
-import cloudinary.uploader
-import cloudinary.api
 import os
 import re
 import requests
 from io import BytesIO
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
+from dotenv import load_dotenv
+
+load_dotenv()
 
 cloudinary.config(
-    cloud_name=os.getenv("CLOUDINARY_CLOUD_NAME", "your_cloud_name"),
-    api_key=os.getenv("CLOUDINARY_API_KEY", "your_api_key"),
-    api_secret=os.getenv("CLOUDINARY_API_SECRET", "your_api_secret"),
+    cloud_name=os.getenv("CLOUDINARY_CLOUD_NAME"),
+    api_key=os.getenv("CLOUDINARY_API_KEY"),
+    api_secret=os.getenv("CLOUDINARY_API_SECRET"),
     secure=True
 )
 
@@ -44,7 +47,6 @@ def upload_from_url(image_url, recipe_name):
         return None
 
 def delete_recipe_image(recipe_name):
-
     public_id = f"recipes/{sanitize_recipe_name(recipe_name)}"
     try:
         result = cloudinary.uploader.destroy(public_id, invalidate=True)
