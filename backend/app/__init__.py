@@ -39,3 +39,5 @@ def create_app():
     app.register_blueprint(user_bp, url_prefix='/api/users')
 
     return app
+
+
