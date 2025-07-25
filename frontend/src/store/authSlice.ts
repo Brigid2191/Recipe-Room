@@ -29,7 +29,7 @@ export const loginUser = createAsyncThunk(
   }
 );
 
-// ✅ Async thunk: reset password
+
 export const resetPassword = createAsyncThunk(
   'auth/resetPassword',
   async (email: string, thunkAPI) => {
@@ -42,7 +42,7 @@ export const resetPassword = createAsyncThunk(
   }
 );
 
-// ✅ Slice
+
 const authSlice = createSlice({
   name: 'auth',
   initialState,

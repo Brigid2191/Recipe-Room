@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = '/api/groups'; // Adjust this if your Flask endpoint differs
+const API_URL = '/api/groups'; 
 
 export const getAllGroups = async () => {
   const response = await axios.get(`${API_URL}`);

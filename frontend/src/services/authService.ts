@@ -17,7 +17,7 @@ export const register = async (userData: {
 };
 
 export const logout = () => {
-  // Optionally clear localStorage, session, or notify backend
+  
   localStorage.removeItem('user');
 };
 

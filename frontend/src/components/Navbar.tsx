@@ -15,7 +15,7 @@ const Navbar: React.FC = () => (
           <li className="nav-item">
             <NavLink to="/register" className="nav-link">Register</NavLink>
           </li>
-          {/* Add more nav links here like Home, Bookmarks, Groups */}
+          {}
         </ul>
       </div>
     </div>

@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = '/api/recipes'; // Update if your Flask routes differ
+const API_URL = '/api/recipes'; 
 
 export const getAllRecipes = async () => {
   const response = await axios.get(`${API_URL}`);
