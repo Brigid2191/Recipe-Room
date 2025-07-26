@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import type { AppDispatch } from '../../store';
-import { loginUser } from '../../store/authSlice';
+import type { AppDispatch } from '../store'; 
+import { resetPassword } from '../store/authSlice';
+
 
 
 
@@ -28,7 +29,8 @@ const LoginForm: React.FC = () => {
     e.preventDefault();
     setError('');
     try {
-      await dispatch(loginUser(formData)).unwrap();
+        await dispatch(resetPassword(formData.email)).unwrap();
+
       navigate('/');
     } catch (err: any) {
       setError(err.message || 'Login failed');
@@ -66,10 +68,7 @@ const LoginForm: React.FC = () => {
         {error && <div className="alert alert-danger">{error}</div>}
         <button type="submit" className="btn btn-primary w-100">Login</button>
 
-         <div className="text-center mt-3">
-  <a href="/forgot-password" className="text-decoration-none">Forgot Password?</a>
-</div>
-         
+        {/* 👇 ADD THIS LINK */}
         <div className="text-center mt-3">
           <a href="/forgot-password" className="text-decoration-none">Forgot Password?</a>
         </div>

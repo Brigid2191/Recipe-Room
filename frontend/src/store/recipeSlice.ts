@@ -4,7 +4,9 @@ import type { PayloadAction } from '@reduxjs/toolkit';
 interface Recipe {
   id: number;
   title: string;
-  description: string;
+  description?: string; // optional if you want to keep it
+  ingredients: string[];
+  steps: string;
 }
 
 interface RecipeState {
@@ -16,13 +18,13 @@ const initialState: RecipeState = {
 };
 
 const recipeSlice = createSlice({
-  name: 'recipe',
+  name: 'recipes', // ✅ use plural
   initialState,
   reducers: {
-    setRecipes(state, action: PayloadAction<Recipe[]>) {
+    setRecipes: (state, action: PayloadAction<Recipe[]>) => {
       state.recipes = action.payload;
     },
-    addRecipe(state, action: PayloadAction<Recipe>) {
+    addRecipe: (state, action: PayloadAction<Recipe>) => {
       state.recipes.push(action.payload);
     },
   },

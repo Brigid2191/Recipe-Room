@@ -5,7 +5,7 @@ import recipeReducer from './recipeSlice';
 const store = configureStore({
   reducer: {
     auth: authReducer,
-    recipe: recipeReducer,
+    recipes: recipeReducer, // ✅ using plural
   },
 });
 

@@ -12,10 +12,18 @@
   "dependencies": {
     "@reduxjs/toolkit": "^2.8.2",
     "axios": "^1.11.0",
+<<<<<<< HEAD
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-redux": "^9.2.0",
     "react-router-dom": "^7.7.0"
+=======
+    "crypto-browserify": "^3.12.1",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "react-redux": "^9.2.0",
+    "react-router-dom": "^6.30.1"
+>>>>>>> e070dea4fb98cfb4e9dc4d3062e9e4e1238acb31
   },
   "devDependencies": {
     "@eslint/js": "^9.30.1",
