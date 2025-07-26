@@ -5,11 +5,9 @@ import recipeReducer from './recipeSlice';
 const store = configureStore({
   reducer: {
     auth: authReducer,
-    recipes: recipeReducer,
-   
+    recipes: recipeReducer, // ✅ using plural
   },
 });
-
 
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
