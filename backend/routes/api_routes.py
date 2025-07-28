@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
-from .models import db, User, Recipe, Bookmark, Rating, Comment
+from app.models import db, User, Recipe, Bookmark, Rating, Comment
 import requests
 
 api = Blueprint('api', __name__)
@@ -10,7 +10,7 @@ def register():
     data = request.json
     if User.query.filter_by(email=data['email']).first():
         return jsonify({"message": "Email already registered"}), 400
-    
+
     user = User(username=data['username'], email=data['email'])
     user.set_password(data['password'])
     db.session.add(user)
@@ -23,7 +23,7 @@ def login():
     user = User.query.filter_by(email=data['email']).first()
     if not user or not user.check_password(data['password']):
         return jsonify({"message": "Invalid credentials"}), 401
-    
+
     token = create_access_token(identity=user.id)
     return jsonify(access_token=token)
 
@@ -32,7 +32,7 @@ def get_recipes():
     name = request.args.get('name')
     ingredient = request.args.get('ingredient')
     country = request.args.get('country')
-    
+
     base_url = "https://www.themealdb.com/api/json/v1/1/"
     if name:
         url = f"{base_url}search.php?s={name}"
@@ -42,7 +42,7 @@ def get_recipes():
         url = f"{base_url}filter.php?a={country}"
     else:
         url = f"{base_url}latest.php"
-    
+
     response = requests.get(url)
     data = response.json()
 
@@ -51,7 +51,7 @@ def get_recipes():
         for meal in data["meals"]:
             meal["user_rating"] = None
             meal["bookmarked"] = False
-    
+
     return jsonify(data)
 
 @api.route('/bookmark', methods=['POST'])
@@ -99,4 +99,4 @@ def add_comment():
 @api.route('/comments/<int:recipe_id>', methods=['GET'])
 def get_comments(recipe_id):
     comments = Comment.query.filter_by(recipe_id=recipe_id).all()
-    return jsonify([{"user_id": c.user_id, "content": c.content} for c in comments])                                                  
+    return jsonify([{"user_id": c.user_id, "content": c.content} for c in comments])
