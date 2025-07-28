@@ -1,7 +1,7 @@
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
-from ..extensions import db
-from ..models import User, Group, Recipe
+from app.extension import db
+from app.models import User, GroupRecipe, Recipe
 
 group_bp = Blueprint('groups', __name__)
 

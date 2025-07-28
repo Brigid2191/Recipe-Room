@@ -9,7 +9,6 @@ const Navbar: React.FC = () => (
         Recipe‑Room
       </Link>
 
-     
       <button
         className="navbar-toggler"
         type="button"
@@ -22,9 +21,18 @@ const Navbar: React.FC = () => (
         <span className="navbar-toggler-icon"></span>
       </button>
 
-     
       <div className="collapse navbar-collapse" id="navbarNav">
         <ul className="navbar-nav ms-auto">
+          <li className="nav-item">
+            <NavLink
+              to="/create"
+              className={({ isActive }) =>
+                `nav-link mx-2 ${isActive ? 'text-warning fw-bold' : 'text-white'}`
+              }
+            >
+              Create Recipe
+            </NavLink>
+          </li>
           <li className="nav-item">
             <NavLink
               to="/login"

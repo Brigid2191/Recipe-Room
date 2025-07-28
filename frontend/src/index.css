@@ -1,3 +1,15 @@
 .nav-link:hover {
   color: #ffc107 !important; 
 }
+
+body {
+  background-image: url("https://assets.gqindia.com/photos/6847f8a10ad7c5a4cd780ebf/16:9/w_2240,c_limit/Indian-breakfast-dishes.gif");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #fff; /* default text color */
+}
