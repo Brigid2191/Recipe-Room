@@ -1,6 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { login, resetPassword as resetPasswordService } from '../services/authService';
-
+ 
 interface AuthState {
   user: any;
   isAuthenticated: boolean;
@@ -15,27 +14,59 @@ const initialState: AuthState = {
   error: null,
 };
 
-// ✅ Async thunk: login
+
 export const loginUser = createAsyncThunk(
   'auth/loginUser',
   async (credentials: { email: string; password: string }, thunkAPI) => {
     try {
-      const data = await login(credentials);
-      return data;
+      
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
+      
+      const mockUser = {
+        id: 1,
+        username: 'mockuser',
+        email: credentials.email,
+        token: 'mock-login-token',
+      };
+
+      return mockUser;
     } catch (err: any) {
-      return thunkAPI.rejectWithValue(err.response?.data?.message || 'Login failed');
+      return thunkAPI.rejectWithValue('Mock login failed');
     }
   }
 );
 
+
+export const registerUser = createAsyncThunk(
+  'auth/registerUser',
+  async (userData: { username: string; email: string; password: string }, thunkAPI) => {
+    try {
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
+      const mockResponse = {
+        id: Date.now(),
+        username: userData.username,
+        email: userData.email,
+        token: 'mock-register-token',
+      };
+
+      return mockResponse;
+    } catch (err: any) {
+      return thunkAPI.rejectWithValue('Mock registration failed');
+    }
+  }
+);
+
+
 export const resetPassword = createAsyncThunk(
   'auth/resetPassword',
-  async (email: string, thunkAPI) => {
+  async (_email:string, thunkAPI) => {
     try {
-      const message = await resetPasswordService(email);
-      return message;
+      await new Promise((resolve) => setTimeout(resolve, 500));
+      return 'Password reset link sent (mock)';
     } catch (err: any) {
-      return thunkAPI.rejectWithValue(err.response?.data?.message || 'Reset failed');
+      return thunkAPI.rejectWithValue('Mock reset failed');
     }
   }
 );
@@ -43,14 +74,16 @@ export const resetPassword = createAsyncThunk(
 const authSlice = createSlice({
   name: 'auth',
   initialState,
-  reducers: { 
+  reducers: {
     logout(state) {
       state.user = null;
       state.isAuthenticated = false;
+      localStorage.removeItem('user');
     },
   },
   extraReducers: (builder) => {
     builder
+      
       .addCase(loginUser.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -59,11 +92,30 @@ const authSlice = createSlice({
         state.user = action.payload;
         state.isAuthenticated = true;
         state.loading = false;
+        localStorage.setItem('user', JSON.stringify(action.payload));
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
       })
+
+      
+      .addCase(registerUser.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(registerUser.fulfilled, (state, action) => {
+        state.user = action.payload;
+        state.isAuthenticated = true;
+        state.loading = false;
+        localStorage.setItem('user', JSON.stringify(action.payload));
+      })
+      .addCase(registerUser.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      })
+
+      
       .addCase(resetPassword.pending, (state) => {
         state.loading = true;
         state.error = null;

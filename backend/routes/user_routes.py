@@ -1,8 +1,10 @@
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
+
 from app.extensions import db
 from app.models import User
 from ..utils.cloudinary_helper import upload_image
+
 
 user_bp = Blueprint('users', __name__)
 

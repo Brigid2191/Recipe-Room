@@ -1,7 +1,7 @@
 from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy.orm import validates
-from. import db
+from app.extension import db
 from builtins import property, len, ValueError, AttributeError
 
 group_members = db.Table('group_members',
