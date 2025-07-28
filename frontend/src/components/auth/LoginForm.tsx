@@ -3,25 +3,16 @@ import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import type { AppDispatch } from '../../store';
 import { loginUser } from '../../store/authSlice';
-
-
-
+ 
 const LoginForm: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
 
-  const [formData, setFormData] = useState({
-    email: '',
-    password: '',
-  });
-
+  const [formData, setFormData] = useState({ email: '', password: '' });
   const [error, setError] = useState('');
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -31,7 +22,7 @@ const LoginForm: React.FC = () => {
       await dispatch(loginUser(formData)).unwrap();
       navigate('/');
     } catch (err: any) {
-      setError(err.message || 'Login failed');
+      setError(err?.message || 'Login failed');
     }
   };
 
@@ -66,10 +57,6 @@ const LoginForm: React.FC = () => {
         {error && <div className="alert alert-danger">{error}</div>}
         <button type="submit" className="btn btn-primary w-100">Login</button>
 
-         <div className="text-center mt-3">
-  <a href="/forgot-password" className="text-decoration-none">Forgot Password?</a>
-</div>
-         
         <div className="text-center mt-3">
           <a href="/forgot-password" className="text-decoration-none">Forgot Password?</a>
         </div>

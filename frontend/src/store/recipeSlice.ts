@@ -4,7 +4,7 @@ import type { PayloadAction } from '@reduxjs/toolkit';
 interface Recipe {
   id: number;
   title: string;
-  description?: string; // optional if you want to keep it
+  description?: string; 
   ingredients: string[];
   steps: string;
 }
@@ -18,7 +18,7 @@ const initialState: RecipeState = {
 };
 
 const recipeSlice = createSlice({
-  name: 'recipes', // ✅ use plural
+  name: 'recipes', 
   initialState,
   reducers: {
     setRecipes: (state, action: PayloadAction<Recipe[]>) => {
