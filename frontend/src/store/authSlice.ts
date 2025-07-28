@@ -61,7 +61,7 @@ export const registerUser = createAsyncThunk(
 
 export const resetPassword = createAsyncThunk(
   'auth/resetPassword',
-  async (email: string, thunkAPI) => {
+  async (_email:string, thunkAPI) => {
     try {
       await new Promise((resolve) => setTimeout(resolve, 500));
       return 'Password reset link sent (mock)';
