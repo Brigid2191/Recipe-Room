@@ -1,15 +1,11 @@
-// src/App.tsx
-import { Routes, Route } from 'react-router-dom';
-import Layout from './components/Layout';
+import { Provider } from "react-redux";
+import store from "./store";
+import AppRouter from "./AppRouter";
 
-
-const App = () => (
-  <Routes>
-    <Route path="/" element={<Layout />}>
-      
-    </Route>
-  </Routes>
-);
-
-export default App;
-
+export default function App() {
+    return (
+        <Provider store={store}>
+            <AppRouter />
+        </Provider>
+    );
+}

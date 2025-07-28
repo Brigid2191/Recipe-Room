@@ -1,10 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
 
-
 interface Recipe {
   id: number;
   title: string;
+  description?: string; // optional if you want to keep it
   ingredients: string[];
   steps: string;
 }
@@ -18,7 +18,7 @@ const initialState: RecipeState = {
 };
 
 const recipeSlice = createSlice({
-  name: 'recipes',
+  name: 'recipes', // ✅ use plural
   initialState,
   reducers: {
     setRecipes: (state, action: PayloadAction<Recipe[]>) => {

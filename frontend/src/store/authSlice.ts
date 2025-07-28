@@ -1,4 +1,3 @@
-// src/store/authSlice.ts
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { login, resetPassword as resetPasswordService } from '../services/authService';
 
@@ -29,7 +28,6 @@ export const loginUser = createAsyncThunk(
   }
 );
 
-
 export const resetPassword = createAsyncThunk(
   'auth/resetPassword',
   async (email: string, thunkAPI) => {
@@ -42,11 +40,10 @@ export const resetPassword = createAsyncThunk(
   }
 );
 
-
 const authSlice = createSlice({
   name: 'auth',
   initialState,
-  reducers: {
+  reducers: { 
     logout(state) {
       state.user = null;
       state.isAuthenticated = false;
