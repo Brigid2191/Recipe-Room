@@ -1,6 +1,6 @@
 import axios from '../api/axios';
 
-const API_URL = 'http://localhost:5000/api/auth';
+const API_URL = `${import.meta.env.VITE_API_URL}/auth`;
 
 export interface User {
   id: number;
