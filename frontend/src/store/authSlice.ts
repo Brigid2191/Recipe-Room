@@ -1,121 +1,100 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
- 
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import type { PayloadAction } from "@reduxjs/toolkit";
+import * as authService from "../services/authService";
+
+interface User {
+  id: number;
+  username: string;
+  email: string;
+}
+
 interface AuthState {
-  user: any;
-  isAuthenticated: boolean;
+  user: User | null;
+  token: string | null;
   loading: boolean;
   error: string | null;
 }
 
+const userFromStorage = localStorage.getItem("user");
 const initialState: AuthState = {
-  user: null,
-  isAuthenticated: false,
+  user: userFromStorage ? JSON.parse(userFromStorage).user : null,
+  token: userFromStorage ? JSON.parse(userFromStorage).token : null,
   loading: false,
   error: null,
 };
 
-
+// Async Thunks
 export const loginUser = createAsyncThunk(
-  'auth/loginUser',
+  "auth/login",
   async (credentials: { email: string; password: string }, thunkAPI) => {
     try {
-      
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-
-      
-      const mockUser = {
-        id: 1,
-        username: 'mockuser',
-        email: credentials.email,
-        token: 'mock-login-token',
-      };
-
-      return mockUser;
-    } catch (err: any) {
-      return thunkAPI.rejectWithValue('Mock login failed');
+      return await authService.login(credentials);
+    } catch (error: any) {
+      return thunkAPI.rejectWithValue(error.message || "Login failed");
     }
   }
 );
-
 
 export const registerUser = createAsyncThunk(
-  'auth/registerUser',
+  "auth/register",
   async (userData: { username: string; email: string; password: string }, thunkAPI) => {
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-
-      const mockResponse = {
-        id: Date.now(),
-        username: userData.username,
-        email: userData.email,
-        token: 'mock-register-token',
-      };
-
-      return mockResponse;
-    } catch (err: any) {
-      return thunkAPI.rejectWithValue('Mock registration failed');
+      return await authService.register(userData);
+    } catch (error: any) {
+      return thunkAPI.rejectWithValue(error.message || "Registration failed");
     }
   }
 );
 
-
 export const resetPassword = createAsyncThunk(
-  'auth/resetPassword',
-  async (_email:string, thunkAPI) => {
+  "auth/resetPassword",
+  async (email: string, thunkAPI) => {
     try {
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      return 'Password reset link sent (mock)';
-    } catch (err: any) {
-      return thunkAPI.rejectWithValue('Mock reset failed');
+      return await authService.resetPassword(email);
+    } catch (error: any) {
+      return thunkAPI.rejectWithValue(error.message || "Reset password failed");
     }
   }
 );
 
 const authSlice = createSlice({
-  name: 'auth',
+  name: "auth",
   initialState,
   reducers: {
-    logout(state) {
+    logout: (state) => {
       state.user = null;
-      state.isAuthenticated = false;
-      localStorage.removeItem('user');
+      state.token = null;
+      localStorage.removeItem("user");
     },
   },
   extraReducers: (builder) => {
     builder
-      
       .addCase(loginUser.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(loginUser.fulfilled, (state, action) => {
-        state.user = action.payload;
-        state.isAuthenticated = true;
+      .addCase(loginUser.fulfilled, (state, action: PayloadAction<{ token: string; user: User }>) => {
         state.loading = false;
-        localStorage.setItem('user', JSON.stringify(action.payload));
+        state.user = action.payload.user;
+        state.token = action.payload.token;
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
       })
-
-      
       .addCase(registerUser.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(registerUser.fulfilled, (state, action) => {
-        state.user = action.payload;
-        state.isAuthenticated = true;
+      .addCase(registerUser.fulfilled, (state, action: PayloadAction<{ token: string; user: User }>) => {
         state.loading = false;
-        localStorage.setItem('user', JSON.stringify(action.payload));
+        state.user = action.payload.user;
+        state.token = action.payload.token;
       })
       .addCase(registerUser.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
       })
-
-      
       .addCase(resetPassword.pending, (state) => {
         state.loading = true;
         state.error = null;

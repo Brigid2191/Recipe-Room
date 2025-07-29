@@ -1,15 +1,26 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, useLocation, Link } from "react-router-dom";
 import type { AppDispatch } from "../../store";
 import { loginUser } from "../../store/authSlice";
 
 const LoginForm: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
+
+  // Check if we were redirected from ForgotPassword with a success message
+  useEffect(() => {
+    if (location.state?.success) {
+      setSuccessMessage(location.state.success);
+      // Clear the message so it doesn’t persist on refresh
+      navigate(location.pathname, { replace: true, state: {} });
+    }
+  }, [location, navigate]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -30,6 +41,9 @@ const LoginForm: React.FC = () => {
     <div className="container mt-5" style={{ maxWidth: "400px" }}>
       <h2 className="mb-4 text-center text-primary">Login</h2>
       <form onSubmit={handleSubmit} className="border p-4 rounded bg-white shadow">
+        {successMessage && <div className="alert alert-success">{successMessage}</div>}
+        {error && <div className="alert alert-danger">{error}</div>}
+
         <div className="mb-3">
           <label htmlFor="email" className="form-label">
             Email Address
@@ -61,8 +75,6 @@ const LoginForm: React.FC = () => {
             required
           />
         </div>
-
-        {error && <div className="alert alert-danger">{error}</div>}
 
         <button type="submit" className="btn btn-primary w-100">
           Login
