@@ -15,7 +15,7 @@ export interface AuthResponse {
   user: User;
 }
 
-// Save auth data to localStorage
+// Save token & user to localStorage
 const saveAuthData = (data: AuthResponse) => {
   localStorage.setItem('token', data.access_token);
   localStorage.setItem('user', JSON.stringify(data.user));
@@ -56,4 +56,9 @@ export const getCurrentUser = (): User | null => {
 // Check if user is authenticated
 export const isAuthenticated = (): boolean => {
   return !!localStorage.getItem('token');
+};
+
+// Get auth token
+export const getAuthToken = (): string | null => {
+  return localStorage.getItem('token');
 };

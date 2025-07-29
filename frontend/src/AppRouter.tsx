@@ -9,6 +9,7 @@ import Bookmarks from "./pages/Bookmarks";
 import Groups from "./pages/Groups";
 import Home from "./pages/Home";
 import Layout from "./components/Layout";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 export default function AppRouter() {
     return (
@@ -16,10 +17,14 @@ export default function AppRouter() {
             <Route path="/" element={<Layout />}>
                 <Route index element={<Home />} />
                 <Route path="recipes/:id" element={<RecipeDetail />} />
-                <Route path="create" element={<CreateRecipe />} />
-                <Route path="profile" element={<Profile />} />
-                <Route path="bookmarks" element={<Bookmarks />} />
-                <Route path="groups" element={<Groups />} />
+
+                {/* Protected routes */}
+                <Route element={<ProtectedRoute />}>
+                    <Route path="create" element={<CreateRecipe />} />
+                    <Route path="profile" element={<Profile />} />
+                    <Route path="bookmarks" element={<Bookmarks />} />
+                    <Route path="groups" element={<Groups />} />
+                </Route>
             </Route>
 
             <Route path="/login" element={<Login />} />
