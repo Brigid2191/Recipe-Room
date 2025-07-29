@@ -1,14 +1,14 @@
 from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy.orm import validates
-from app.extension import db
-from builtins import property, len, ValueError, AttributeError
+from app.extensions import db
 
-group_members = db.Table('group_members',
-    db.Column('user_id', db.Integer, db.ForeignKey('users.id')),
-    db.Column('group_recipe_id', db.Integer, db.ForeignKey('group_recipes.id'))
+# Association table for users and groups
+group_members = db.Table(
+    'group_members',
+    db.Column('user_id', db.Integer, db.ForeignKey('users.id'), primary_key=True),
+    db.Column('group_id', db.Integer, db.ForeignKey('groups.id'), primary_key=True)
 )
-
 
 class User(db.Model):
     __tablename__ = "users"
@@ -80,7 +80,7 @@ class Recipe(db.Model):
             "country": self.country,
             "number_of_people_served": self.number_of_people_served,
             "image_url": self.image_url,
-           " video_url": self.video_url,
+            "video_url": self.video_url,
             "created_at": self.created_at.isoformat(),
             "user_id": self.user_id
         }
@@ -170,14 +170,14 @@ class Rating(db.Model):
         }
 
 
-class GroupRecipe(db.Model):
-    __tablename__ = 'group_recipes'
+class Group(db.Model):
+    __tablename__ = 'groups'
 
     id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String)
+    title = db.Column(db.String(100), nullable=False)
     description = db.Column(db.String)
 
-    members = db.relationship('User', secondary=group_members, backref='group_recipes')
+    members = db.relationship('User', secondary=group_members, backref='groups')
 
     def to_dict(self):
         return {
@@ -186,6 +186,8 @@ class GroupRecipe(db.Model):
             'description': self.description,
             'members': [member.to_dict() for member in self.members]
         }
+
+
 class Favorite(db.Model):
     __tablename__ = 'favorites'
 

@@ -2,8 +2,9 @@ from dotenv import load_dotenv
 from flask_restful import Api
 
 from app import create_app
-from backend.app.extensions import db
-from app.models import User, Recipe, Rating, GroupRecipe, Bookmark, Ingredient, Comment, Favorite
+from app.extensions import db
+from app.models import User, Recipe, Rating, Group, Bookmark, Ingredient, Comment, Favorite
+
 load_dotenv()
 
 app = create_app()
@@ -16,11 +17,11 @@ def make_shell_context():
         'User': User,
         'Recipe': Recipe,
         'Rating': Rating,
-        'GroupRecipe': GroupRecipe,
+        'Group': Group,
         'Bookmark': Bookmark,
         'Ingredient': Ingredient,
         'Comment': Comment,
-        'Favourite': Favorite
+        'Favorite': Favorite
     }
 
 if __name__ == '__main__':

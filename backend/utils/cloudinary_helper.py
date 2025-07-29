@@ -19,6 +19,22 @@ cloudinary.config(
 def sanitize_recipe_name(name):
     return re.sub(r'\W+', '_', name.strip()).lower()
 
+def upload_image(file, folder="uploads"):
+    """
+    Upload a generic image to Cloudinary.
+    Returns the secure URL of the uploaded image.
+    """
+    try:
+        result = cloudinary.uploader.upload(
+            file,
+            folder=folder,
+            resource_type="image"
+        )
+        return result["secure_url"]
+    except Exception as e:
+        print(f"[ERROR] Image upload failed: {e}")
+        return None
+
 def upload_recipe_image(file, recipe_name):
     public_id = f"recipes/{sanitize_recipe_name(recipe_name)}"
     try:
