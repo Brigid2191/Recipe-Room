@@ -6,58 +6,54 @@ export interface User {
   id: number;
   username: string;
   email: string;
+  profile_image_url?: string;
+  created_at?: string;
 }
 
 export interface AuthResponse {
-  token: string;
+  access_token: string;
   user: User;
 }
+
+// Save auth data to localStorage
+const saveAuthData = (data: AuthResponse) => {
+  localStorage.setItem('token', data.access_token);
+  localStorage.setItem('user', JSON.stringify(data.user));
+};
 
 // Login
 export const login = async (
   credentials: { email: string; password: string }
 ): Promise<AuthResponse> => {
-  try {
-    const response = await axios.post(`${API_URL}/login`, credentials);
-    const data = response.data;
-    localStorage.setItem('user', JSON.stringify(data));
-    return data;
-  } catch (error: any) {
-    throw new Error(error.response?.data?.message || 'Login failed');
-  }
+  const response = await axios.post<AuthResponse>(`${API_URL}/login`, credentials);
+  const data = response.data;
+  saveAuthData(data);
+  return data;
 };
 
 // Register
 export const register = async (
   userData: { username: string; email: string; password: string }
 ): Promise<AuthResponse> => {
-  try {
-    const response = await axios.post(`${API_URL}/register`, userData);
-    const data = response.data;
-    localStorage.setItem('user', JSON.stringify(data));
-    return data;
-  } catch (error: any) {
-    throw new Error(error.response?.data?.message || 'Registration failed');
-  }
+  const response = await axios.post<AuthResponse>(`${API_URL}/register`, userData);
+  const data = response.data;
+  saveAuthData(data);
+  return data;
 };
 
 // Logout
 export const logout = () => {
+  localStorage.removeItem('token');
   localStorage.removeItem('user');
 };
 
-// Reset password
-export const resetPassword = async (email: string): Promise<{ message: string }> => {
-  try {
-    const response = await axios.post(`${API_URL}/reset-password`, { email });
-    return response.data;
-  } catch (error: any) {
-    throw new Error(error.response?.data?.message || 'Failed to reset password');
-  }
-};
-
 // Get current user
-export const getCurrentUser = (): AuthResponse | null => {
+export const getCurrentUser = (): User | null => {
   const storedUser = localStorage.getItem('user');
   return storedUser ? JSON.parse(storedUser) : null;
+};
+
+// Check if user is authenticated
+export const isAuthenticated = (): boolean => {
+  return !!localStorage.getItem('token');
 };
