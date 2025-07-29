@@ -1,10 +1,10 @@
-from flask import Flask
+from flask import Flask 
 from dotenv import load_dotenv
 import os
 
 from app.extensions import db, migrate, bcrypt, jwt, cors
 
-load_dotenv()
+load_dotenv() 
 
 def create_app():
     app = Flask(__name__)
@@ -16,7 +16,7 @@ def create_app():
 
     # Initialize extensions
     db.init_app(app)
-    migrate.init_app(app, db)
+    migrate.init_app(app, db) 
     bcrypt.init_app(app)
     jwt.init_app(app)
     cors.init_app(app, supports_credentials=True)
@@ -45,4 +45,4 @@ def create_app():
         return "API is running"
 
 
-    return app
+    return app 

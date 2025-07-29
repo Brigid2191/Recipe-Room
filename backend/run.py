@@ -18,7 +18,7 @@ def make_shell_context():
         'User': User,
         'Recipe': Recipe,
         'Rating': Rating,
-        'Group': Group,
+        'Group': GroupRecipe,
         'Bookmark': Bookmark,
         'Ingredient': Ingredient,
         'Comment': Comment,
