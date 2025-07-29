@@ -3,7 +3,7 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 
 from app.extensions import db
 from app.models import User
-from ..utils.cloudinary_helper import upload_image
+from utils.cloudinary_helper import upload_image
 
 
 user_bp = Blueprint('users', __name__)
@@ -19,8 +19,9 @@ def update_profile():
     if 'username' in request.form:
         user.username = request.form['username']
     if 'profile_image' in request.files:
-        image_url = upload_image(request.files['profile_image'])
-        user.profile_image = image_url
+        image_url = upload_image(request.files['profile_image'], "profile_image")
+        user.profile_image_url = image_url
+
 
     db.session.commit()
     return jsonify({"message": "Profile updated"})

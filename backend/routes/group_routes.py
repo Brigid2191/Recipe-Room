@@ -2,7 +2,7 @@ from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
 
 from app.extensions import db
-from app.models import User, Group, Recipe
+from app.models import User, GroupRecipe, Recipe
 
 
 group_bp = Blueprint('groups', __name__)
@@ -14,7 +14,7 @@ def create_group():
     data = request.json
     user_id = get_jwt_identity()
 
-    group = Group(name=data['name'], created_by=user_id)
+    group = GroupRecipe(name=data['name'], created_by=user_id)
     group.members.append(User.query.get(user_id))  # add creator to members list
 
     db.session.add(group)
@@ -27,7 +27,7 @@ def create_group():
 @jwt_required()
 def join_group(group_id):
     user_id = get_jwt_identity()
-    group = Group.query.get_or_404(group_id)
+    group = GroupRecipe.query.get_or_404(group_id)
     user = User.query.get(user_id)
 
     if user in group.members:
@@ -43,7 +43,7 @@ def join_group(group_id):
 @jwt_required()
 def leave_group(group_id):
     user_id = get_jwt_identity()
-    group = Group.query.get_or_404(group_id)
+    group = GroupRecipe.query.get_or_404(group_id)
     user = User.query.get(user_id)
 
     if user not in group.members:
@@ -59,7 +59,7 @@ def leave_group(group_id):
 @jwt_required()
 def add_recipe_to_group(group_id):
     data = request.json
-    group = Group.query.get_or_404(group_id)
+    group = GroupRecipe.query.get_or_404(group_id)
     recipe = Recipe.query.get(data['recipe_id'])
 
     if not recipe:
@@ -83,5 +83,5 @@ def my_groups():
 @group_bp.route('/groups/<int:group_id>/recipes', methods=['GET'])
 @jwt_required()
 def get_group_recipes(group_id):
-    group = Group.query.get_or_404(group_id)
+    group = GroupRecipe.query.get_or_404(group_id)
     return jsonify([{"id": r.id, "title": r.title} for r in group.recipes])

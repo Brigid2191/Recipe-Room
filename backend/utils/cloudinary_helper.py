@@ -54,3 +54,6 @@ def delete_recipe_image(recipe_name):
     except Exception as e:
         print(f"[ERROR] Failed to delete image '{recipe_name}': {e}")
         return None
+    
+upload_image = upload_recipe_image
+

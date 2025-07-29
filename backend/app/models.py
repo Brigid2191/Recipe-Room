@@ -1,8 +1,11 @@
-from datetime import datetime
-from werkzeug.security import generate_password_hash, check_password_hash
-from sqlalchemy.orm import validates
-from app.extension import db
-from builtins import property, len, ValueError, AttributeError
+from builtins import property, len, ValueError, AttributeError  
+from datetime import datetime  
+
+from werkzeug.security import generate_password_hash, check_password_hash  
+from sqlalchemy.orm import validates 
+
+from app.extensions import db  
+
 
 group_members = db.Table('group_members',
     db.Column('user_id', db.Integer, db.ForeignKey('users.id')),

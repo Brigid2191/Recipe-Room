@@ -38,6 +38,11 @@ def create_app():
     app.register_blueprint(recipe_bp, url_prefix='/api/recipes')
     app.register_blueprint(user_bp, url_prefix='/api/users')
 
+    @app.route('/')
+    def home():
+        return "API is running"
+
+
     return app
 
 

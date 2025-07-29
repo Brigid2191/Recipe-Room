@@ -1,8 +1,10 @@
+# pylint: disable=import-error
+
 from dotenv import load_dotenv
 from flask_restful import Api
 
 from app import create_app
-from backend.app.extensions import db
+from app.extensions import db
 from app.models import User, Recipe, Rating, GroupRecipe, Bookmark, Ingredient, Comment, Favorite
 load_dotenv()
 
