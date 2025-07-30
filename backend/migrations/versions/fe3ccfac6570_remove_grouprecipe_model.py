@@ -1,7 +1,7 @@
 """Remove GroupRecipe model
 
 Revision ID: fe3ccfac6570
-Revises: 
+Revises:
 Create Date: 2025-07-29 13:55:45.535361
 
 """

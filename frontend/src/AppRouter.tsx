@@ -10,6 +10,7 @@ import Groups from "./pages/Groups";
 import Home from "./pages/Home";
 import Layout from"./components/Layout";
 import ProtectedRoute from "./components/ProtectedRoute";
+import RecipeUploader from "./components/RecipeUploader";
 
 
 export default function AppRouter() {
@@ -18,7 +19,7 @@ export default function AppRouter() {
             <Route path="/" element={<Layout />}>
                 <Route index element={<Home />} />
                 <Route path="recipes/:id" element={<RecipeDetail />} />
-
+<Route path="RecipeUploader" element={<RecipeUploader/>}/>
                 {/* Protected routes */}
                 <Route element={<ProtectedRoute />}>
                     <Route path="create" element={<CreateRecipe />} />

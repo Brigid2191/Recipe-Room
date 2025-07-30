@@ -24,7 +24,7 @@ def create_app():
 
     # Import models so Alembic can detect them
     with app.app_context():
-        from app import models  # This imports User, Recipe, Group, etc.
+        from app import models
 
     # Register blueprints
     from routes.auth_routes import auth_bp
