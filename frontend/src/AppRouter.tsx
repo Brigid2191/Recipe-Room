@@ -8,8 +8,9 @@ import Profile from "./pages/Profile";
 import Bookmarks from "./pages/Bookmarks";
 import Groups from "./pages/Groups";
 import Home from "./pages/Home";
-import Layout from "./components/Layout";
+import Layout from"./components/Layout";
 import ProtectedRoute from "./components/ProtectedRoute";
+
 
 export default function AppRouter() {
     return (

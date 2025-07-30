@@ -1,5 +1,6 @@
 from flask import Flask
 from dotenv import load_dotenv
+from flask_cors import CORS
 import os
 
 from app.extensions import db, migrate, bcrypt, jwt, cors
