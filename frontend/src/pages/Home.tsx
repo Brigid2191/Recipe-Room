@@ -1,43 +1,49 @@
+import { useEffect, useState } from "react";
 import RecipeCard from "../components/recipes/RecipeCard";
+import { getRecipes } from "../services/recipeService";
 
-const mockRecipes = [
-  {
-    id: 1,
-    title: "Sushi",
-    imageUrl: "/images/sushi.jpg",  
-    servings: 2,
-    country: "Japan",
-    rating: 4.8,
-  },
-  {
-    id: 2,
-    title: "Pizza Margherita",
-    imageUrl: "/images/pizza.jpg",
-    servings: 4,
-    country: "Italy",
-    rating: 4.6,
-  },
-  {
-    id: 3,
-    title: "Beef Stew",
-    imageUrl: "/images/beefstew.jpg",
-    servings: 5,
-    country: "Kenya",
-    rating: 4.7,
-  },
-];
+// Define or import a proper Recipe interface
+interface Recipe {
+  id: number;
+  title: string;
+  description: string;
+  image_url?: string;
+  // add more fields if needed
+}
 
 const Home = () => {
+  const [recipes, setRecipes] = useState<Recipe[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchRecipes = async () => {
+      try {
+        const data = await getRecipes();
+        setRecipes(data);
+      } catch (error) {
+        console.error("Failed to fetch recipes:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchRecipes();
+  }, []);
+
   return (
     <div className="container mt-4">
       <h1 className="text-info mb-4">Welcome to Recipe Room</h1>
-      <div className="row row-cols-1 row-cols-md-3 g-4">
-        {mockRecipes.map((recipe) => (
-          <div className="col" key={recipe.id}>
-            <RecipeCard recipe={recipe} />
-          </div>
-        ))}
-      </div>
+      {loading ? (
+        <p>Loading recipes...</p>
+      ) : (
+        <div className="row row-cols-1 row-cols-md-3 g-4">
+          {recipes.map((recipe) => (
+            <div className="col" key={recipe.id}>
+              <RecipeCard recipe={recipe} />
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 };
