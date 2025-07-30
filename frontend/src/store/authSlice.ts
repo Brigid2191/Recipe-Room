@@ -37,6 +37,22 @@ export const registerUser = createAsyncThunk(
   }
 );
 
+// ✅ loginUser thunk
+export const loginUser = createAsyncThunk(
+  "auth/loginUser",
+  async (
+    credentials: { email: string; password: string },
+    { rejectWithValue }
+  ) => {
+    try {
+      const response = await authService.login(credentials);
+      return response.user;
+    } catch (error: any) {
+      return rejectWithValue(error.response?.data?.message || "Login failed.");
+    }
+  }
+);
+
 // ✅ resetPassword thunk
 export const resetPassword = createAsyncThunk(
   "auth/resetPassword",
@@ -46,7 +62,7 @@ export const resetPassword = createAsyncThunk(
   ) => {
     try {
       const response = await authService.resetPassword(email);
-      return response.message; // adjust if your backend returns something else
+      return response.message;
     } catch (error: any) {
       return rejectWithValue(error.response?.data?.message || "Reset failed.");
     }
@@ -78,6 +94,21 @@ const authSlice = createSlice({
         state.error = action.payload as string;
       });
 
+    // loginUser
+    builder
+      .addCase(loginUser.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(loginUser.fulfilled, (state, action: PayloadAction<User>) => {
+        state.loading = false;
+        state.user = action.payload;
+      })
+      .addCase(loginUser.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      });
+
     // resetPassword
     builder
       .addCase(resetPassword.pending, (state) => {
@@ -86,7 +117,6 @@ const authSlice = createSlice({
       })
       .addCase(resetPassword.fulfilled, (state) => {
         state.loading = false;
-        // Optional: you can add a success message field if needed
       })
       .addCase(resetPassword.rejected, (state, action) => {
         state.loading = false;
