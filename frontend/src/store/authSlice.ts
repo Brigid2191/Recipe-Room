@@ -15,10 +15,13 @@ interface AuthState {
   error: string | null;
 }
 
+// Load token and user from localStorage separately
 const userFromStorage = localStorage.getItem("user");
+const tokenFromStorage = localStorage.getItem("token");
+
 const initialState: AuthState = {
-  user: userFromStorage ? JSON.parse(userFromStorage).user : null,
-  token: userFromStorage ? JSON.parse(userFromStorage).token : null,
+  user: userFromStorage ? JSON.parse(userFromStorage) : null,
+  token: tokenFromStorage || null,
   loading: false,
   error: null,
 };
@@ -26,9 +29,13 @@ const initialState: AuthState = {
 // Async Thunks
 export const loginUser = createAsyncThunk(
   "auth/login",
-  async (credentials: { email: string; password: string }, thunkAPI) => {
+  async (
+    credentials: { email: string; password: string },
+    thunkAPI
+  ) => {
     try {
-      return await authService.login(credentials);
+      const data = await authService.login(credentials);
+      return { token: data.access_token, user: data.user };
     } catch (error: any) {
       return thunkAPI.rejectWithValue(error.message || "Login failed");
     }
@@ -37,9 +44,13 @@ export const loginUser = createAsyncThunk(
 
 export const registerUser = createAsyncThunk(
   "auth/register",
-  async (userData: { username: string; email: string; password: string }, thunkAPI) => {
+  async (
+    userData: { username: string; email: string; password: string },
+    thunkAPI
+  ) => {
     try {
-      return await authService.register(userData);
+      const data = await authService.register(userData);
+      return { token: data.access_token, user: data.user };
     } catch (error: any) {
       return thunkAPI.rejectWithValue(error.message || "Registration failed");
     }
@@ -57,6 +68,7 @@ export const resetPassword = createAsyncThunk(
   }
 );
 
+// Slice
 const authSlice = createSlice({
   name: "auth",
   initialState,
@@ -65,36 +77,48 @@ const authSlice = createSlice({
       state.user = null;
       state.token = null;
       localStorage.removeItem("user");
+      localStorage.removeItem("token");
     },
   },
   extraReducers: (builder) => {
     builder
+      // Login
       .addCase(loginUser.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(loginUser.fulfilled, (state, action: PayloadAction<{ token: string; user: User }>) => {
-        state.loading = false;
-        state.user = action.payload.user;
-        state.token = action.payload.token;
-      })
+      .addCase(
+        loginUser.fulfilled,
+        (state, action: PayloadAction<{ token: string; user: User }>) => {
+          state.loading = false;
+          state.user = action.payload.user;
+          state.token = action.payload.token;
+        }
+      )
       .addCase(loginUser.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
       })
+
+      // Register
       .addCase(registerUser.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(registerUser.fulfilled, (state, action: PayloadAction<{ token: string; user: User }>) => {
-        state.loading = false;
-        state.user = action.payload.user;
-        state.token = action.payload.token;
-      })
+      .addCase(
+        registerUser.fulfilled,
+        (state, action: PayloadAction<{ token: string; user: User }>) => {
+          state.loading = false;
+          state.user = action.payload.user;
+          state.token = action.payload.token;
+        }
+      )
       .addCase(registerUser.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
       })
+
+      // Reset Password
       .addCase(resetPassword.pending, (state) => {
         state.loading = true;
         state.error = null;
