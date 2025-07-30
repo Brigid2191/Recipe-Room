@@ -1,13 +1,15 @@
-from flask import Flask 
+from flask import Flask
 from dotenv import load_dotenv
 import os
+from flask_cors import CORS
+from app.extensions import db, migrate, bcrypt, jwt
 
-from app.extensions import db, migrate, bcrypt, jwt, cors
-
-load_dotenv() 
+load_dotenv()
 
 def create_app():
     app = Flask(__name__)
+    
+    CORS(app, supports_credentials=True, resources={r"/api/*": {"origins": ["http://localhost:5173", "http://127.0.0.1:5173"]}})
 
     # Configuration
     app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL', 'sqlite:///app.db')
@@ -16,14 +18,12 @@ def create_app():
 
     # Initialize extensions
     db.init_app(app)
-    migrate.init_app(app, db) 
+    migrate.init_app(app, db)
     bcrypt.init_app(app)
     jwt.init_app(app)
-    cors.init_app(app, supports_credentials=True)
-
-    # Import models so Alembic can detect them
+ 
     with app.app_context():
-        from app import models  # This imports User, Recipe, Group, etc.
+        from app import models  
 
     # Register blueprints
     from routes.auth_routes import auth_bp
@@ -44,5 +44,4 @@ def create_app():
     def home():
         return "API is running"
 
-
-    return app 
+    return app
