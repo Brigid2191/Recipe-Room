@@ -1,7 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
-import ForgotPassword from "./pages/ForgetPassword";
+import ForgotPassword from "./pages/ForgotPassword";
 import RecipeDetail from "./pages/RecipeDetail";
 import CreateRecipe from "./pages/CreateRecipe";
 import Profile from "./pages/Profile";
