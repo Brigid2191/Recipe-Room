@@ -1,5 +1,6 @@
 from flask import Flask
 from dotenv import load_dotenv
+from flask_cors import CORS
 import os
 from flask_cors import CORS
 from app.extensions import db, migrate, bcrypt, jwt
@@ -23,7 +24,7 @@ def create_app():
     jwt.init_app(app)
  
     with app.app_context():
-        from app import models  
+        from app import models  # This imports User, Recipe, Group, etc.
 
     # Register blueprints
     from routes.auth_routes import auth_bp

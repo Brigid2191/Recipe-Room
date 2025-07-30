@@ -1,4 +1,4 @@
-import axios from '../api/axios';
+import API from "../api/axios";  // Use the centralized axios instance
 
 export interface Group {
   id: number;
@@ -25,49 +25,58 @@ export interface Recipe {
   user_id: number;
 }
 
-const API_URL = '/api/groups';
+const GROUPS_ENDPOINT = "/groups";
 
+// Get all groups
 export const getAllGroups = async (): Promise<Group[]> => {
-  const response = await axios.get(`${API_URL}`);
+  const response = await API.get(GROUPS_ENDPOINT);
   return response.data;
 };
 
+// Get group by ID
 export const getGroupById = async (id: number): Promise<Group> => {
-  const response = await axios.get(`${API_URL}/${id}`);
+  const response = await API.get(`${GROUPS_ENDPOINT}/${id}`);
   return response.data;
 };
 
+// Create a new group
 export const createGroup = async (groupData: Partial<Group>): Promise<Group> => {
-  const response = await axios.post(`${API_URL}`, groupData);
+  const response = await API.post(GROUPS_ENDPOINT, groupData);
   return response.data;
 };
 
+// Update a group
 export const updateGroup = async (id: number, groupData: Partial<Group>): Promise<Group> => {
-  const response = await axios.put(`${API_URL}/${id}`, groupData);
+  const response = await API.put(`${GROUPS_ENDPOINT}/${id}`, groupData);
   return response.data;
 };
 
+// Delete a group
 export const deleteGroup = async (id: number): Promise<{ message: string }> => {
-  const response = await axios.delete(`${API_URL}/${id}`);
+  const response = await API.delete(`${GROUPS_ENDPOINT}/${id}`);
   return response.data;
 };
 
+// Join a group
 export const joinGroup = async (groupId: number): Promise<{ message: string }> => {
-  const response = await axios.post(`${API_URL}/${groupId}/join`);
+  const response = await API.post(`${GROUPS_ENDPOINT}/${groupId}/join`);
   return response.data;
 };
 
+// Leave a group
 export const leaveGroup = async (groupId: number): Promise<{ message: string }> => {
-  const response = await axios.post(`${API_URL}/${groupId}/leave`);
+  const response = await API.post(`${GROUPS_ENDPOINT}/${groupId}/leave`);
   return response.data;
 };
 
+// Get group members
 export const getGroupMembers = async (groupId: number): Promise<Member[]> => {
-  const response = await axios.get(`${API_URL}/${groupId}/members`);
+  const response = await API.get(`${GROUPS_ENDPOINT}/${groupId}/members`);
   return response.data;
 };
 
+// Get group recipes
 export const getGroupRecipes = async (groupId: number): Promise<Recipe[]> => {
-  const response = await axios.get(`${API_URL}/${groupId}/recipes`);
+  const response = await API.get(`${GROUPS_ENDPOINT}/${groupId}/recipes`);
   return response.data;
 };

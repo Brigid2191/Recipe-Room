@@ -1,36 +1,44 @@
-import axios from '../api/axios';
+import API from "../api/axios";
 
-const API_URL = '/api/auth';
+export interface Recipe {
+  id: number;
+  title: string;
+  description: string;
+  procedure: string;
+  country: string;
+  number_of_people_served: number;
+  image_url?: string;
+  video_url?: string;
+  user_id: number;
+  created_at?: string;
+}
 
-export const login = async (credentials: { username: string; password: string }) => {
-  const response = await axios.post(`${API_URL}/login`, credentials);
-  if (response.data.access_token) {
-    localStorage.setItem('token', response.data.access_token);
-  }
+// Fetch all recipes
+export const getRecipes = async (): Promise<Recipe[]> => {
+  const response = await API.get("/recipes");
   return response.data;
 };
 
-export const signup = async (userData: { username: string; password: string; image_url?: string; bio?: string }) => {
-  const response = await axios.post(`${API_URL}/signup`, userData);
+// Fetch a recipe by ID
+export const getRecipeById = async (id: number): Promise<Recipe> => {
+  const response = await API.get(`/recipes/${id}`);
   return response.data;
 };
 
-export const logout = () => {
-  localStorage.removeItem('token');
-};
-
-export const getCurrentUser = async () => {
-  const token = localStorage.getItem('token');
-  if (!token) return null;
-
-  const response = await axios.get(`${API_URL}/me`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
+// Create a new recipe
+export const createRecipe = async (recipeData: Partial<Recipe>): Promise<Recipe> => {
+  const response = await API.post("/recipes", recipeData);
   return response.data;
 };
 
-export const isAuthenticated = () => {
-  return !!localStorage.getItem('token');
+// Update an existing recipe
+export const updateRecipe = async (id: number, recipeData: Partial<Recipe>): Promise<Recipe> => {
+  const response = await API.put(`/recipes/${id}`, recipeData);
+  return response.data;
+};
+
+// Delete a recipe
+export const deleteRecipe = async (id: number): Promise<{ message: string }> => {
+  const response = await API.delete(`/recipes/${id}`);
+  return response.data;
 };

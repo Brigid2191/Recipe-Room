@@ -1,7 +1,7 @@
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import type { AppDispatch } from "../store";
-import { registerUser } from "../store/authSlice";
+import { registerUser } from "../store/authSlice"; 
 import RegisterForm from "../components/auth/RegisterForm";
 
 const Register = () => {
