@@ -41,6 +41,14 @@ export const register = async (
   return data;
 };
 
+// Reset Password (Dummy example — adjust endpoint and logic as needed)
+export const resetPassword = async (
+  email: string
+): Promise<{ message: string }> => {
+  const response = await axios.post(`${API_URL}/reset-password`, { email });
+  return response.data;
+};
+
 // Logout
 export const logout = () => {
   localStorage.removeItem('token');
