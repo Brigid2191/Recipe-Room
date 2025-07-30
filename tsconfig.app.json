@@ -7,11 +7,13 @@
     "module": "ESNext",
     "skipLibCheck": true,
 
-    /* Bundler mode */
-    "moduleResolution": "bundler",
+    /* ESM + ts-node support */
+    "moduleResolution": "node",               // use 'node' instead of 'bundler'
     "allowImportingTsExtensions": true,
     "verbatimModuleSyntax": true,
-    "moduleDetection": "force",
+    "esModuleInterop": true,                  // <-- added
+    "resolveJsonModule": true,                // <-- in case you're importing .json files
+    "outDir": "./dist",                       // <-- good practice if you ever want to emit
     "noEmit": true,
     "jsx": "react-jsx",
 
@@ -19,7 +21,6 @@
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true
   },
