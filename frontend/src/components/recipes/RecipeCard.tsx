@@ -4,7 +4,8 @@ import { Link } from 'react-router-dom';
 export type Recipe = {
   id: number;
   title: string;
-  imageUrl?: string;   
+  imageUrl?: string;    // Used in frontend
+  image_url?: string;   // Used if coming from backend API
   servings?: number;
   country?: string;
   rating?: number;
@@ -15,13 +16,15 @@ type RecipeCardProps = {
 };
 
 const RecipeCard: React.FC<RecipeCardProps> = ({ recipe }) => {
+  const imageSrc = recipe.imageUrl || recipe.image_url || "/default-image.jpg";
+
   return (
     <div className="card h-100 shadow-sm">
       <Link to={`/recipes/${recipe.id}`} className="text-decoration-none text-dark">
         <img
-          src={recipe.imageUrl || "/default-image.jpg"}
+          src={imageSrc}
           className="card-img-top"
-          alt={recipe.title}
+          alt={recipe.title || "Recipe image"}
           style={{ height: '200px', objectFit: 'cover' }}
         />
         <div className="card-body">

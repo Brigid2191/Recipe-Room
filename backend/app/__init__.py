@@ -45,3 +45,4 @@ def create_app():
         return "API is running"
 
     return app
+    

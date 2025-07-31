@@ -1,6 +1,13 @@
+
 from flask import Blueprint, request, jsonify
 from app.extensions import db 
 from app.models import Recipe 
+
+
+from flask import Blueprint, request, jsonify
+from app.extensions import db
+from app.models import Recipe
+
 import requests
 
 recipe_bp = Blueprint('recipes', __name__)
@@ -23,7 +30,19 @@ def get_recipes():
 
     response = requests.get(url)
     data = response.json()
-    return jsonify(data)
+
+    # Standardize the response for frontend
+    meals = data.get("meals", [])
+    formatted = []
+    for meal in meals or []:
+        formatted.append({
+            "id": meal.get("idMeal"),
+            "title": meal.get("strMeal"),
+            "description": meal.get("strInstructions", "")[:100] + "...",
+            "image_url": meal.get("strMealThumb"),
+        })
+
+    return jsonify(formatted)
 
 @recipe_bp.route('/', methods=['POST'])
 def create_recipe():

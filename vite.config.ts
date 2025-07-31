@@ -3,11 +3,11 @@ import react from '@vitejs/plugin-react';
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  root: 'frontend',          
+  root: 'frontend',
   plugins: [react()],
   build: {
-    outDir: '../dist',       
-    emptyOutDir: true        
+    outDir: '../dist',
+    emptyOutDir: true
   },
   server: {
     port: 5173,
