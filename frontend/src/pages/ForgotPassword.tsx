@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import type { AppDispatch } from "../store";
-import { resetPassword } from "../store/authSlice";
+import { resetPassword } from "../store/authSlice"; 
 
 const ForgotPassword: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
