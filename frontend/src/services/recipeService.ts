@@ -13,9 +13,9 @@ export interface Recipe {
   created_at?: string;
 }
 
-// Fetch all recipes
-export const getRecipes = async (): Promise<Recipe[]> => {
-  const response = await API.get("/recipes");
+// Fetch all recipes with optional filters
+export const getRecipes = async (params?: Record<string, string | number>): Promise<Recipe[]> => {
+  const response = await API.get("/recipes", { params });
   return response.data;
 };
 
@@ -42,3 +42,12 @@ export const deleteRecipe = async (id: number): Promise<{ message: string }> => 
   const response = await API.delete(`/recipes/${id}`);
   return response.data;
 };
+
+// Search recipes by query string
+export const searchRecipes = async (query: string): Promise<Recipe[]> => {
+  const response = await API.get(`/recipes/search?q=${encodeURIComponent(query)}`);
+  return response.data;
+};
+
+// Optional delay for loading simulations
+export const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
