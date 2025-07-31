@@ -1,3 +1,5 @@
+// src/pages/ForgotPassword.tsx
+
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -32,7 +34,10 @@ const ForgotPassword: React.FC = () => {
   return (
     <div className="container mt-5" style={{ maxWidth: "400px" }}>
       <h2 className="mb-4 text-center text-primary">Forgot Password</h2>
-      <form onSubmit={handleSubmit} className="border p-4 rounded bg-white shadow">
+      <form
+        onSubmit={handleSubmit}
+        className="border p-4 rounded bg-white shadow"
+      >
         {error && <div className="alert alert-danger">{error}</div>}
 
         <div className="mb-3">
@@ -51,7 +56,11 @@ const ForgotPassword: React.FC = () => {
           />
         </div>
 
-        <button type="submit" className="btn btn-primary w-100" disabled={loading}>
+        <button
+          type="submit"
+          className="btn btn-primary w-100"
+          disabled={loading}
+        >
           {loading ? "Sending..." : "Send Reset Link"}
         </button>
 
