@@ -13,26 +13,27 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import RecipeUploader from "./components/RecipeUploader";
 
 export default function AppRouter() {
-    return (
-        <Routes>
-            <Route path="/" element={<Layout />}>
-                <Route index element={<Home />} />
-                <Route path="recipes/:id" element={<RecipeDetail />} />
-                <Route path="recipe-uploader" element={<RecipeUploader />} />
+  return (
+    <Routes>
+      <Route path="/" element={<Layout />}>
+        <Route index element={<Home />} />
+        <Route path="login" element={<Login />} />
+        <Route path="register" element={<Register />} />
+        <Route path="forgot-password" element={<ForgotPassword />} />
+        <Route path="recipes/:id" element={<RecipeDetail />} />
+        <Route path="recipe-uploader" element={<RecipeUploader />} />
 
-                {/* Protected routes */}
-                <Route element={<ProtectedRoute />}>
-                    <Route path="create-recipe" element={<CreateRecipe />} />
-                    <Route path="profile" element={<Profile />} />
-                    <Route path="bookmarks" element={<Bookmarks />} />
-                    <Route path="groups" element={<Groups />} />
-                </Route>
-            </Route>
+        {/* Protected routes */}
+        <Route element={<ProtectedRoute />}>
+          <Route path="create-recipe" element={<CreateRecipe />} />
+          <Route path="profile" element={<Profile />} />
+          <Route path="bookmarks" element={<Bookmarks />} />
+          <Route path="groups" element={<Groups />} />
+        </Route>
+      </Route>
 
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/forgot-password" element={<ForgotPassword />} />
-            {/* <Route path="*" element={<NotFound />} /> // optional fallback */}
-        </Routes>
-    );
+      {/* Optional: catch-all for 404 */}
+      {/* <Route path="*" element={<NotFound />} /> */}
+    </Routes>
+  );
 }

@@ -1,19 +1,19 @@
-// src/components/Layout.tsx
 import { Outlet } from "react-router-dom";
 import Navbar from "./Navbar";
-import Footer from "./Footer";
-import { useAuth } from "../contexts/authContext"; // make sure this path is correct
+import { useAuth } from "../contexts/authContext";
 
 const Layout = () => {
   const { isAuthenticated, logout } = useAuth();
 
   return (
-    <div>
+    <div className="d-flex flex-column min-vh-100">
       <Navbar isAuthenticated={isAuthenticated} onLogout={logout} />
-      <main>
+
+      <main className="flex-fill container py-4">
         <Outlet />
       </main>
-      <Footer />
+
+      {/* Optional: Add your footer here if you have one */}
     </div>
   );
 };
