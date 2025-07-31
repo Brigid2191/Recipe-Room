@@ -8,6 +8,7 @@ const Home = () => {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [showGenerate, setShowGenerate] = useState(false);
+  const [hasSearched, setHasSearched] = useState(false);
 
   useEffect(() => {
     const fetchRecipes = async () => {
@@ -31,19 +32,17 @@ const Home = () => {
   };
 
   const handleSearch = () => {
-    // Add search or filter functionality here if needed
+    setHasSearched(true);
+    // Optionally implement filtering here
     console.log("Searching for:", search);
   };
 
   const handleGenerate = () => {
-    // Add generate recipe logic here
     console.log("Generating recipe for:", search);
   };
 
   return (
     <div className="container mt-4">
-      <h1 className="text-info mb-4">Welcome to Recipe Room</h1>
-
       {/* Search Form */}
       <div className="d-flex align-items-center mb-4 gap-2">
         <input
@@ -70,10 +69,8 @@ const Home = () => {
         )}
       </div>
 
-      {/* Loader or Recipes */}
-      {loading ? (
-        <p className="fs-4 text-secondary">Loading recipes...</p>
-      ) : recipes.length > 0 ? (
+      {/* Recipes List */}
+      {!loading && recipes.length > 0 ? (
         <div className="row row-cols-1 row-cols-md-3 g-4">
           {recipes.map((recipe) => (
             <div className="col" key={recipe.id}>
@@ -81,9 +78,9 @@ const Home = () => {
             </div>
           ))}
         </div>
-      ) : (
+      ) : !loading && hasSearched ? (
         <p className="fs-4">No recipes found.</p>
-      )}
+      ) : null}
     </div>
   );
 };

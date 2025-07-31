@@ -17,13 +17,15 @@ const Navbar = ({ isAuthenticated, onLogout }: NavbarProps) => {
               <Link className="nav-link" to="/">Home</Link>
             </li>
 
+            {/* Create Recipe visible to all */}
+            <li className="nav-item">
+              <Link className="nav-link" to="/create-recipe">Create Recipe</Link>
+            </li>
+
             {isAuthenticated ? (
               <>
                 <li className="nav-item">
                   <Link className="nav-link" to="/profile">Profile</Link>
-                </li>
-                <li className="nav-item">
-                  <Link className="nav-link" to="/create-recipe">Create Recipe</Link>
                 </li>
                 <li className="nav-item">
                   <button className="btn btn-link nav-link" onClick={onLogout}>Logout</button>
