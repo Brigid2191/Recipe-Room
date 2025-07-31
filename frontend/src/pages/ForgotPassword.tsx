@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import type { AppDispatch } from "../store";
-import { resetPassword } from "../store/authSlice"; // ✅ Import as a named export
+import { resetPassword } from "../store/authSlice"; 
 
 const ForgotPassword: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();

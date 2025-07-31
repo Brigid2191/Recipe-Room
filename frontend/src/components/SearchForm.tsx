@@ -16,9 +16,9 @@ const SearchForm: React.FC = () => {
 
     try {
       const response = await axios.get(
-        `http://localhost:5000/api/recipes/search?query=${encodeURIComponent(query)}`
+        `http://localhost:5000/api/recipes?name=${encodeURIComponent(query)}`
       );
-      setResults(response.data.recipes); // depends on backend response shape
+      setResults(response.data);
     } catch (error) {
       console.error("Error searching recipes:", error);
     } finally {

@@ -11,6 +11,7 @@ import Home from "./pages/Home";
 import Layout from "./components/Layout";
 import ProtectedRoute from "./components/ProtectedRoute";
 import RecipeUploader from "./components/RecipeUploader";
+import SearchRecipes from "./pages/SearchRecipes"; // ✅ Import the component
 
 export default function AppRouter() {
   return (
@@ -22,6 +23,7 @@ export default function AppRouter() {
         <Route path="forgot-password" element={<ForgotPassword />} />
         <Route path="recipes/:id" element={<RecipeDetail />} />
         <Route path="recipe-uploader" element={<RecipeUploader />} />
+        <Route path="search" element={<SearchRecipes />} /> {/* ✅ Add this line */}
 
         {/* Protected routes */}
         <Route element={<ProtectedRoute />}>

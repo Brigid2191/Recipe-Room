@@ -1,86 +1,80 @@
-import { useEffect, useState } from "react";
-import RecipeCard from "../components/recipes/RecipeCard";
-import { getRecipes } from "../services/recipeService";
-import type { Recipe } from "../types/Recipe";
+import React, { useState } from 'react';
+import RecipeCard from '../components/recipes/RecipeCard';
+import  type { Recipe } from '../components/recipes/RecipeCard';
+import axios from 'axios';
 
-const Home = () => {
+const Home: React.FC = () => {
   const [recipes, setRecipes] = useState<Recipe[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [search, setSearch] = useState("");
-  const [showGenerate, setShowGenerate] = useState(false);
-  const [hasSearched, setHasSearched] = useState(false);
+  const [query, setQuery] = useState('');
+  const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    const fetchRecipes = async () => {
-      try {
-        const data = await getRecipes();
-        setRecipes(data);
-      } catch (error) {
-        console.error("Failed to fetch recipes:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
+  const handleSearch = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!query.trim()) return;
 
-    fetchRecipes();
-  }, []);
+    setLoading(true);
+    try {
+      const response = await axios.get(
+        `https://www.themealdb.com/api/json/v1/1/search.php?s=${query}`
+      );
 
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setSearch(value);
-    setShowGenerate(value.trim().length > 0);
-  };
+      const meals = response.data.meals || [];
 
-  const handleSearch = () => {
-    setHasSearched(true);
-    // Optionally implement filtering here
-    console.log("Searching for:", search);
-  };
+      const mappedRecipes: Recipe[] = meals.map((meal: any) => ({
+        id: parseInt(meal.idMeal),
+        title: meal.strMeal,
+        imageUrl: meal.strMealThumb,
+        country: meal.strArea,
+        servings: Math.floor(Math.random() * 5) + 1, // Fake servings
+        rating: Math.floor(Math.random() * 5) + 1, // Fake rating
+      }));
 
-  const handleGenerate = () => {
-    console.log("Generating recipe for:", search);
+      setRecipes(mappedRecipes);
+    } catch (error) {
+      console.error('Error fetching recipes:', error);
+      setRecipes([]);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <div className="container mt-4">
-      {/* Search Form */}
-      <div className="d-flex align-items-center mb-4 gap-2">
-        <input
-          type="text"
-          placeholder="Search or describe a recipe..."
-          className="form-control fs-5 p-3"
-          value={search}
-          onChange={handleSearchChange}
-        />
-        <button
-          className="btn"
-          style={{ backgroundColor: "white", color: "black", fontWeight: "bold" }}
-          onClick={handleSearch}
-        >
-          Search
-        </button>
-        {showGenerate && (
-          <button
-            className="btn btn-primary fs-5"
-            onClick={handleGenerate}
-          >
-            Generate
-          </button>
-        )}
-      </div>
+      <h2 className="text-center mb-4">Search Recipes</h2>
 
-      {/* Recipes List */}
-      {!loading && recipes.length > 0 ? (
-        <div className="row row-cols-1 row-cols-md-3 g-4">
-          {recipes.map((recipe) => (
-            <div className="col" key={recipe.id}>
-              <RecipeCard recipe={recipe} />
-            </div>
-          ))}
+      <form className="mb-4" onSubmit={handleSearch}>
+        <div className="input-group">
+          <input
+            type="text"
+            className="form-control"
+            placeholder="Search recipes..."
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+          />
+          <button className="btn btn-primary" type="submit">
+            Search
+          </button>
         </div>
-      ) : !loading && hasSearched ? (
-        <p className="fs-4">No recipes found.</p>
-      ) : null}
+      </form>
+
+      {loading ? (
+        <div className="text-center">
+          <div className="spinner-border text-primary" role="status" />
+          <p className="mt-2">Fetching recipes...</p>
+        </div>
+      ) : (
+        <div className="row row-cols-1 row-cols-md-3 g-4">
+          {recipes.length > 0 ? (
+            recipes.map((recipe) => (
+              <div key={recipe.id} className="col">
+                <RecipeCard recipe={recipe} />
+              </div>
+            ))
+          ) : (
+            <p className="text-center">No recipes found. Try a different search.</p>
+          )}
+        </div>
+      )}
     </div>
   );
 };

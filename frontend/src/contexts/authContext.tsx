@@ -1,21 +1,40 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useState, useEffect } from "react";
 import type { ReactNode } from "react";
+import type { User } from "../types/user";
+import {
+  getUserFromStorage,
+  saveUserToStorage,
+  removeUserFromStorage,
+} from "../services/localStorageService";
 
 interface AuthContextType {
-  user: any;
-  login: (user: any) => void;
+  user: User | null;
+  login: (user: User) => void;
   logout: () => void;
-  isAuthenticated: boolean; // ✅ Add this line
+  isAuthenticated: boolean;
 }
 
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<User | null>(null);
 
-  const login = (userData: any) => setUser(userData);
-  const logout = () => setUser(null);
-  const isAuthenticated = !!user; // ✅ Compute auth status
+  useEffect(() => {
+    const storedUser = getUserFromStorage();
+    if (storedUser) setUser(storedUser);
+  }, []);
+
+  const login = (userData: User) => {
+    setUser(userData);
+    saveUserToStorage(userData);
+  };
+
+  const logout = () => {
+    setUser(null);
+    removeUserFromStorage();
+  };
+
+  const isAuthenticated = !!user;
 
   return (
     <AuthContext.Provider value={{ user, login, logout, isAuthenticated }}>

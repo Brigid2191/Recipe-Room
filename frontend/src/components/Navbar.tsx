@@ -17,7 +17,6 @@ const Navbar = ({ isAuthenticated, onLogout }: NavbarProps) => {
               <Link className="nav-link" to="/">Home</Link>
             </li>
 
-            {/* Create Recipe visible to all */}
             <li className="nav-item">
               <Link className="nav-link" to="/create-recipe">Create Recipe</Link>
             </li>
