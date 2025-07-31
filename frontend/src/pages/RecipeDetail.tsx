@@ -5,7 +5,7 @@ import type { RootState } from '../store';
 const RecipeDetail = () => {
   const { id } = useParams<{ id: string }>();
   const recipe = useSelector((state: RootState) =>
-    state.recipes.recipes.find(r => r.id === Number(id))
+    state.recipes.recipes.find((r: { id: number }) => r.id === Number(id))
   );
 
   if (!recipe) {
@@ -21,7 +21,7 @@ const RecipeDetail = () => {
       <h1 className="text-warning">{recipe.title}</h1>
       <p><strong>Ingredients:</strong></p>
       <ul>
-        {recipe.ingredients.map((ing, index) => (
+        {recipe.ingredients.map((ing: string, index: number) => (
           <li key={index}>{ing}</li>
         ))}
       </ul>

@@ -1,130 +1,66 @@
-import { createSlice, createAsyncThunk, type PayloadAction } from "@reduxjs/toolkit";
-import * as authService from "../services/authService";
+import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 
-// User and AuthState interfaces
-interface User {
-  id: number;
+interface LoginPayload {
   username: string;
-  email: string;
+  password: string;
 }
 
 interface AuthState {
-  user: User | null;
+  user: string | null;
   loading: boolean;
   error: string | null;
 }
 
-// Initial state
 const initialState: AuthState = {
   user: null,
   loading: false,
   error: null,
 };
 
-// ✅ registerUser thunk
-export const registerUser = createAsyncThunk(
-  "auth/registerUser",
-  async (
-    userData: { username: string; email: string; password: string },
-    { rejectWithValue }
-  ) => {
-    try {
-      const response = await authService.register(userData);
-      return response.user;
-    } catch (error: any) {
-      return rejectWithValue(error.response?.data?.message || "Registration failed.");
-    }
+// Async thunk with proper typing
+export const login = createAsyncThunk<
+  string, // Return type (can be a token or user ID, etc.)
+  LoginPayload, // Payload type
+  {
+    rejectValue: string; // Rejection type
   }
-);
-
-// ✅ loginUser thunk
-export const loginUser = createAsyncThunk(
-  "auth/loginUser",
-  async (
-    credentials: { email: string; password: string },
-    { rejectWithValue }
-  ) => {
-    try {
-      const response = await authService.login(credentials);
-      return response.user;
-    } catch (error: any) {
-      return rejectWithValue(error.response?.data?.message || "Login failed.");
+>('auth/login', async ({ username, password }: LoginPayload, { rejectWithValue }) => {
+  try {
+    // Replace this with your real API call
+    if (username === 'admin' && password === 'admin') {
+      return 'fake_token';
+    } else {
+      return rejectWithValue('Invalid credentials');
     }
+  } catch (error) {
+    return rejectWithValue('Login failed');
   }
-);
+});
 
-// ✅ resetPassword thunk
-export const resetPassword = createAsyncThunk(
-  "auth/resetPassword",
-  async (
-    email: string,
-    { rejectWithValue }
-  ) => {
-    try {
-      const response = await authService.resetPassword(email);
-      return response.message;
-    } catch (error: any) {
-      return rejectWithValue(error.response?.data?.message || "Reset failed.");
-    }
-  }
-);
-
-// Create slice
 const authSlice = createSlice({
-  name: "auth",
+  name: 'auth',
   initialState,
   reducers: {
-    logout(state) {
+    logout(state: AuthState) {
       state.user = null;
     },
   },
   extraReducers: (builder) => {
-    // registerUser
     builder
-      .addCase(registerUser.pending, (state) => {
+      .addCase(login.pending, (state: AuthState) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(registerUser.fulfilled, (state, action: PayloadAction<User>) => {
+      .addCase(login.fulfilled, (state: AuthState, action: PayloadAction<string>) => {
         state.loading = false;
         state.user = action.payload;
       })
-      .addCase(registerUser.rejected, (state, action) => {
+      .addCase(login.rejected, (state: AuthState, action) => {
         state.loading = false;
-        state.error = action.payload as string;
-      });
-
-    // loginUser
-    builder
-      .addCase(loginUser.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(loginUser.fulfilled, (state, action: PayloadAction<User>) => {
-        state.loading = false;
-        state.user = action.payload;
-      })
-      .addCase(loginUser.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload as string;
-      });
-
-    // resetPassword
-    builder
-      .addCase(resetPassword.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(resetPassword.fulfilled, (state) => {
-        state.loading = false;
-      })
-      .addCase(resetPassword.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload as string;
+        state.error = action.payload ?? 'Unknown error';
       });
   },
 });
 
-// Exports
 export const { logout } = authSlice.actions;
 export default authSlice.reducer;
