@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import type { AppDispatch, RootState } from "../../store";
-import { loginUser } from "../../store/authSlice";
+import  loginUser  from "../../store/authSlice";
 
 const LoginForm = () => {
   const dispatch = useDispatch<AppDispatch>();

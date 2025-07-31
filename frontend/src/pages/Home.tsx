@@ -1,13 +1,7 @@
 import { useEffect, useState } from "react";
 import RecipeCard from "../components/recipes/RecipeCard";
 import { getRecipes } from "../services/recipeService";
- 
-interface Recipe {
-  id: number;
-  title: string;
-  description: string;
-  image_url?: string; 
-}
+import type  { Recipe } from "../types/Recipe"; // ✅ Use shared type
 
 const Home = () => {
   const [recipes, setRecipes] = useState<Recipe[]>([]);

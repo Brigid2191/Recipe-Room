@@ -1,15 +1,6 @@
+// src/services/recipeService.ts
 import API from "../api/axios";
-
-export interface Recipe {
-  id: number;
-  title: string;
-  ingredients: string;
-  instructions: string;
-  country: string;
-  serves: number;
-  user_id: number;
-  created_at?: string;
-}
+import type { Recipe } from "../types/Recipe";
 
 export const getRecipes = async (): Promise<Recipe[]> => {
   const response = await API.get("/recipes");
