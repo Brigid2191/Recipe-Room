@@ -19,8 +19,9 @@ def update_profile():
     if 'username' in request.form:
         user.username = request.form['username']
     if 'profile_image' in request.files:
-        image_url = upload_image(request.files['profile_image'])
-        user.profile_image = image_url
+        image_url = upload_image(request.files['profile_image'], "profile_image")
+        user.profile_image_url = image_url
+
 
     db.session.commit()
     return jsonify({"message": "Profile updated"})

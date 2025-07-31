@@ -1,13 +1,21 @@
 import { useEffect, useState } from "react";
 import RecipeCard from "../components/recipes/RecipeCard";
 import { getRecipes } from "../services/recipeService";
+
+ 
+
 import Loader from "../components/Loader";
+
 
 interface Recipe {
   id: number;
   title: string;
   description: string;
+
+  image_url?: string; 
+
   image_url?: string;
+
 }
 
 const Home = () => {
@@ -54,7 +62,11 @@ const Home = () => {
       </form>
 
       {loading ? (
+
+        <p>Loading recipes...</p>
+
         <Loader />
+
       ) : recipes.length > 0 ? (
         <div className="row row-cols-1 row-cols-md-3 g-4">
           {recipes.map((recipe) => (
