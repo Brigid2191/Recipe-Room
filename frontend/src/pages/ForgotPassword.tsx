@@ -1,10 +1,8 @@
-// src/pages/ForgotPassword.tsx
-
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import type { AppDispatch } from "../store";
-import  resetPassword  from "../store/authSlice"; 
+import { resetPassword } from "../store/authSlice"; // ✅ Import as a named export
 
 const ForgotPassword: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -20,7 +18,7 @@ const ForgotPassword: React.FC = () => {
     setLoading(true);
 
     try {
-      await dispatch(resetPassword(email)).unwrap();
+      await dispatch(resetPassword( email )).unwrap(); // ✅ Pass email as object if needed
       navigate("/login", {
         state: { success: "Password reset link sent. Check your email." },
       });

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import type { AppDispatch, RootState } from "../../store";
-import  loginUser  from "../../store/authSlice";
+import { loginUser } from "../../store/authSlice"; // ✅ Named import for thunk
 
 const LoginForm = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -15,7 +15,7 @@ const LoginForm = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await dispatch(loginUser(formData)).unwrap();
+      await dispatch(loginUser(formData)).unwrap(); // ✅ Unwrap to catch errors
     } catch (err) {
       console.error("Login failed:", err);
     }
@@ -66,7 +66,7 @@ const LoginForm = () => {
       >
         {loading ? "Logging in..." : "Login"}
       </button>
-    </form> 
+    </form>
   );
 };
 

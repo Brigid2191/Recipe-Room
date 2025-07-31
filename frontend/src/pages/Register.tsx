@@ -1,7 +1,8 @@
+// src/pages/Register.tsx
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import type { AppDispatch } from "../store";
-import  registerUser  from "../store/authSlice"; 
+import { registerUser } from "../store/authSlice"; // Ensure named import
 import RegisterForm from "../components/auth/RegisterForm";
 
 const Register = () => {
