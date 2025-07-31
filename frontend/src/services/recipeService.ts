@@ -16,6 +16,7 @@ export interface Recipe {
 // Fetch all recipes
 export const getRecipes = async (): Promise<Recipe[]> => {
   const response = await API.get("/recipes");
+
   return response.data;
 };
 
@@ -42,3 +43,5 @@ export const deleteRecipe = async (id: number): Promise<{ message: string }> => 
   const response = await API.delete(`/recipes/${id}`);
   return response.data;
 };
+
+
