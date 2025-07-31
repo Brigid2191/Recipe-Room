@@ -1,3 +1,4 @@
+
 from flask import Blueprint, request, jsonify
 from app.extensions import db
 from app.models import Recipe
