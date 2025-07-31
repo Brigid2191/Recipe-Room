@@ -1,14 +1,12 @@
 import { useEffect, useState } from "react";
 import RecipeCard from "../components/recipes/RecipeCard";
 import { getRecipes } from "../services/recipeService";
-
-// Define or import a proper Recipe interface
+ 
 interface Recipe {
   id: number;
   title: string;
   description: string;
-  image_url?: string;
-  // add more fields if needed
+  image_url?: string; 
 }
 
 const Home = () => {
@@ -35,7 +33,7 @@ const Home = () => {
       <h1 className="text-info mb-4">Welcome to Recipe Room</h1>
       {loading ? (
         <p>Loading recipes...</p>
-      ) : (
+      ) : recipes.length > 0 ? (
         <div className="row row-cols-1 row-cols-md-3 g-4">
           {recipes.map((recipe) => (
             <div className="col" key={recipe.id}>
@@ -43,6 +41,8 @@ const Home = () => {
             </div>
           ))}
         </div>
+      ) : (
+        <p>No recipes found.</p>
       )}
     </div>
   );

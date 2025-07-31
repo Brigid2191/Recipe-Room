@@ -23,28 +23,50 @@ const LoginForm = () => {
 
   return (
     <form onSubmit={handleSubmit}>
-      <h2>Login</h2>
-      <input
-        type="email"
-        name="email"
-        placeholder="Email"
-        value={formData.email}
-        onChange={handleChange}
-        required
-      />
-      <input
-        type="password"
-        name="password"
-        placeholder="Password"
-        value={formData.password}
-        onChange={handleChange}
-        required
-      />
-      <button type="submit" disabled={loading}>
+      <h2 className="text-center mb-4">Login</h2>
+
+      {error && (
+        <div className="alert alert-danger" role="alert">
+          {error}
+        </div>
+      )}
+
+      <div className="mb-3">
+        <label htmlFor="email" className="form-label">Email address</label>
+        <input
+          type="email"
+          name="email"
+          className="form-control"
+          id="email"
+          placeholder="Enter email"
+          value={formData.email}
+          onChange={handleChange}
+          required
+        />
+      </div>
+
+      <div className="mb-3">
+        <label htmlFor="password" className="form-label">Password</label>
+        <input
+          type="password"
+          name="password"
+          className="form-control"
+          id="password"
+          placeholder="Enter password"
+          value={formData.password}
+          onChange={handleChange}
+          required
+        />
+      </div>
+
+      <button
+        type="submit"
+        className="btn btn-primary w-100"
+        disabled={loading}
+      >
         {loading ? "Logging in..." : "Login"}
       </button>
-      {error && <p style={{ color: "red" }}>{error}</p>}
-    </form>
+    </form> 
   );
 };
 
