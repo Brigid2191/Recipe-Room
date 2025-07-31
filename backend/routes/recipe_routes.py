@@ -1,13 +1,11 @@
 from flask import Blueprint, request, jsonify
-
-from app.extensions import db
-
-from app.models import Recipe
+from app.extensions import db 
+from app.models import Recipe 
 import requests
 
 recipe_bp = Blueprint('recipes', __name__)
 
-@recipe_bp.route('/recipes', methods=['GET'])
+@recipe_bp.route('/', methods=['GET'])
 def get_recipes():
     name = request.args.get('name')
     ingredient = request.args.get('ingredient')
@@ -27,7 +25,7 @@ def get_recipes():
     data = response.json()
     return jsonify(data)
 
-@recipe_bp.route('/recipes', methods=['POST'])
+@recipe_bp.route('/', methods=['POST'])
 def create_recipe():
     data = request.json
     recipe = Recipe(
