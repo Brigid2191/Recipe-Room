@@ -47,4 +47,4 @@ const Navbar = ({ isAuthenticated, onLogout }: NavbarProps) => {
   );
 };
 
-export default Navbar;
+export default Navbar;

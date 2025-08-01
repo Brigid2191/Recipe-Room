@@ -11,7 +11,7 @@ import Home from "./pages/Home";
 import Layout from "./components/Layout";
 import ProtectedRoute from "./components/ProtectedRoute";
 import RecipeUploader from "./components/RecipeUploader";
-import SearchRecipes from "./pages/SearchRecipes"; // ✅ Import the component
+import SearchRecipes from "./pages/SearchRecipes";
 
 export default function AppRouter() {
   return (
@@ -23,19 +23,16 @@ export default function AppRouter() {
         <Route path="forgot-password" element={<ForgotPassword />} />
         <Route path="recipes/:id" element={<RecipeDetail />} />
         <Route path="recipe-uploader" element={<RecipeUploader />} />
-        <Route path="search" element={<SearchRecipes />} /> {/* ✅ Add this line */}
+        <Route path="search" element={<SearchRecipes />} />
+        <Route path="create-recipe" element={<CreateRecipe />} /> {/* ⬅️ Made public */}
+        <Route path="profile" element={<Profile />} /> {/* ⬅️ Made public */}
 
         {/* Protected routes */}
         <Route element={<ProtectedRoute />}>
-          <Route path="create-recipe" element={<CreateRecipe />} />
-          <Route path="profile" element={<Profile />} />
           <Route path="bookmarks" element={<Bookmarks />} />
           <Route path="groups" element={<Groups />} />
         </Route>
       </Route>
-
-      {/* Optional: catch-all for 404 */}
-      {/* <Route path="*" element={<NotFound />} /> */}
     </Routes>
   );
 }

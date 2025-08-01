@@ -1,50 +1,63 @@
-import React from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../contexts/authContext";
+import type { User } from "../types/user";
 
 const Login = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState(""); // for matching only
+  const [error, setError] = useState("");
+  const { login } = useAuth();
   const navigate = useNavigate();
 
-  const handleLogin = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
+    const storedUserJSON = localStorage.getItem("recipe-room-user");
 
-    const form = e.currentTarget;
-    const formData = new FormData(form);
-    const email = formData.get("email") as string;
-    const password = formData.get("password") as string;
-
-    const users = JSON.parse(localStorage.getItem("recipe-room-users") || "[]");
-    const matchedUser = users.find(
-      (user: any) => user.email === email && user.password === password
-    );
-
-    if (!matchedUser) {
-      alert("Invalid email or password.");
+    if (!storedUserJSON) {
+      setError("No user found. Please register first.");
       return;
     }
 
-    // Store logged-in user
-    localStorage.setItem("recipe-room-auth", JSON.stringify(matchedUser));
+    const storedUser: User & { password?: string } = JSON.parse(storedUserJSON);
 
-    // Dispatch a custom event so components listening for auth can update
-    window.dispatchEvent(new Event("authChange"));
+    if (storedUser.email !== email || storedUser.password !== password) {
+      setError("Invalid email or password.");
+      return;
+    }
 
-    alert("Login successful!");
+    login(storedUser);
+    localStorage.setItem("currentUser", JSON.stringify(storedUser));
+
     navigate("/");
   };
 
   return (
     <div className="container mt-5" style={{ maxWidth: "500px" }}>
       <h2 className="mb-4">Login</h2>
+      {error && <div className="alert alert-danger">{error}</div>}
       <form onSubmit={handleLogin}>
-        <div className="mb-3">
-          <label className="form-label">Email</label>
-          <input type="email" name="email" className="form-control" required />
+        <div className="form-group mb-3">
+          <label>Email</label>
+          <input
+            type="email"
+            className="form-control"
+            value={email}
+            onChange={e => setEmail(e.target.value)}
+            required
+          />
         </div>
-        <div className="mb-3">
-          <label className="form-label">Password</label>
-          <input type="password" name="password" className="form-control" required />
+        <div className="form-group mb-3">
+          <label>Password</label>
+          <input
+            type="password"
+            className="form-control"
+            value={password}
+            onChange={e => setPassword(e.target.value)}
+            required
+          />
         </div>
-        <button type="submit" className="btn btn-success w-100">Login</button>
+        <button type="submit" className="btn btn-primary w-100">Login</button>
       </form>
     </div>
   );

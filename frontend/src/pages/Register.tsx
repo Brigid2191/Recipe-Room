@@ -1,56 +1,76 @@
-// src/pages/Register.tsx
-import React from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../contexts/authContext";
+import type { User } from "../types/user";
 
 const Register = () => {
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const { login } = useAuth();
   const navigate = useNavigate();
 
-  const handleRegister = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleRegister = (e: React.FormEvent) => {
     e.preventDefault();
 
-    const form = e.currentTarget;
-    const formData = new FormData(form);
-    const userData = {
-      username: formData.get("username") as string,
-      email: formData.get("email") as string,
-      password: formData.get("password") as string,
-    };
-
-    // Check if user already exists
-    const existingUsers = JSON.parse(localStorage.getItem("recipe-room-users") || "[]");
-    const isDuplicate = existingUsers.some((u: any) => u.email === userData.email);
-    if (isDuplicate) {
-      alert("Email already registered.");
-      return;
+    const existing = localStorage.getItem("recipe-room-user");
+    if (existing) {
+      const existingUser = JSON.parse(existing) as User;
+      if (existingUser.email === email) {
+        setError("A user with this email already exists.");
+        return;
+      }
     }
 
-    // Save new user
-    localStorage.setItem(
-      "recipe-room-users",
-      JSON.stringify([...existingUsers, userData])
-    );
+    const newUser: User & { password?: string } = {
+      id: Date.now(),
+      username,
+      email,
+      password, // frontend-only!
+    };
 
-    alert("Registration successful! You can now log in.");
-    navigate("/login");
+    localStorage.setItem("recipe-room-user", JSON.stringify(newUser));
+    login(newUser);
+    navigate("/");
   };
 
   return (
     <div className="container mt-5" style={{ maxWidth: "500px" }}>
       <h2 className="mb-4">Register</h2>
+      {error && <div className="alert alert-danger">{error}</div>}
       <form onSubmit={handleRegister}>
-        <div className="mb-3">
-          <label className="form-label">Username</label>
-          <input type="text" name="username" className="form-control" required />
+        <div className="form-group mb-3">
+          <label>Username</label>
+          <input
+            type="text"
+            className="form-control"
+            value={username}
+            onChange={e => setUsername(e.target.value)}
+            required
+          />
         </div>
-        <div className="mb-3">
-          <label className="form-label">Email</label>
-          <input type="email" name="email" className="form-control" required />
+        <div className="form-group mb-3">
+          <label>Email</label>
+          <input
+            type="email"
+            className="form-control"
+            value={email}
+            onChange={e => setEmail(e.target.value)}
+            required
+          />
         </div>
-        <div className="mb-3">
-          <label className="form-label">Password</label>
-          <input type="password" name="password" className="form-control" required />
+        <div className="form-group mb-3">
+          <label>Password</label>
+          <input
+            type="password"
+            className="form-control"
+            value={password}
+            onChange={e => setPassword(e.target.value)}
+            required
+          />
         </div>
-        <button type="submit" className="btn btn-primary w-100">Register</button>
+        <button type="submit" className="btn btn-success w-100">Register</button>
       </form>
     </div>
   );

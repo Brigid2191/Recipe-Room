@@ -12,17 +12,13 @@ const CreateRecipe: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!currentUser) {
-      alert('You must be logged in to create a recipe.');
-      return;
-    }
 
     const newRecipe = {
       id: Date.now().toString(),
       title,
       description,
       videoUrl,
-      createdBy: currentUser.email,
+      createdBy: currentUser?.email || 'Anonymous',
       comments: [],
       favoritedBy: [],
     };
